@@ -1,7 +1,6 @@
 const isProd = process.env.NODE_ENV === "production";
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: isProd? "production" : 'development',
@@ -22,12 +21,12 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Extracts styles to a separate file other than index.html
-          MiniCssExtractPlugin.loader,
           // Creates `style` nodes from JS strings
           "style-loader",
           // Translates CSS into CommonJS
-          "css-loader",
+          { loader: "css-loader", options: { modules: true } },
+          // Generates a .d.ts module next to the .scss file
+          // "css-modules-typescript-loader",
           // Compiles Sass to CSS
           "sass-loader",
         ],
@@ -39,6 +38,5 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
-    new MiniCssExtractPlugin(),
   ],
 };
